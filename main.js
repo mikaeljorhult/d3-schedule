@@ -16,7 +16,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		timeScale,
 		objects = [],
 		width,
-		height = 400;
+		height = 400,
+		paddingLeft = 150;
 	
 	// Set height and width of schedule.
 	d3.select( window ).on( 'resize', resize );
@@ -46,11 +47,20 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			.attr( 'height', 32 )
 			.attr( 'class', 'object' )
 			.each( function( object, index ) {
-				// Select booking.
-				var bookings = d3.select( this )
-					.selectAll( 'rect' )
-					.data( object.bookings )
-						.enter();
+				// Select bookings.
+				var currentObject = d3.select( this ),
+					bookings = currentObject
+						.selectAll( 'rect' )
+						.data( object.bookings )
+							.enter();
+				
+				// Add object names.
+				currentObject.append( 'svg:text' )
+					.text( object.name )
+					.attr( 'x', 0 )
+					.attr( 'y', ( index * 32 ) + 20 )
+					.attr( 'height', 32 );
+				
 				
 				// Draw bookings within object.
 				bookings.append( 'rect' )
@@ -95,7 +105,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					} );
 				} )
 			] )
-			.range( [ 0, width ] );
+			.range( [ paddingLeft, width ] );
 		
 		// Render bookings.
 		visualize();
