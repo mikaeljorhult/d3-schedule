@@ -33,29 +33,36 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	function visualize() {
 		if ( objects.length < 1 ) { return; }
 		
-		// Append objects.
-		schedule.selectAll( 'g.object' )
+		// Select all objects.
+		var d3_objects = schedule.selectAll( 'g.object' )
 			.data( objects )
-				.enter().append( 'g' )
-					.attr( 'x', 0 )
-					.attr( 'y', function( datum, index ) { return index * 32; } )
-					.attr( 'width', width )
-					.attr( 'height', 32 )
-					.attr( 'class', 'object' )
-					.each( function( object, index ) {
-						// Append each booking within object.
-						var bookings = d3.select( this )
-							.selectAll( 'rect' )
-							.data( object.bookings )
-								.enter().append( 'rect' )
-									.attr( 'rx', 3 )
-									.attr( 'ry', 3 )
-									.attr( 'y', index * 32 )
-									.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
-									.attr( 'height', 30 )
-									.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } )
-									.attr( 'fill', '#2d578b' );
-					} );
+				.enter();
+		
+		// Draw objects
+		d3_objects.append( 'g' )
+			.attr( 'x', 0 )
+			.attr( 'y', function( datum, index ) { return index * 32; } )
+			.attr( 'width', width )
+			.attr( 'height', 32 )
+			.attr( 'class', 'object' )
+			.each( function( object, index ) {
+				// Select booking.
+				var bookings = d3.select( this )
+					.selectAll( 'rect' )
+					.data( object.bookings )
+						.enter();
+				
+				// Draw bookings within object.
+				bookings.append( 'rect' )
+					.attr( 'rx', 3 )
+					.attr( 'ry', 3 )
+					.attr( 'y', index * 32 )
+					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
+					.attr( 'height', 30 )
+					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } )
+					.attr( 'fill', '#2d578b' )
+					.attr( 'class', 'booking' );
+			} );
 	}
 	
 	function getWidth() {
