@@ -17,7 +17,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		objects = [],
 		width,
 		height = 400,
-		paddingLeft = 150;
+		paddingLeft = 150,
+		rowHeight = 32;
 	
 	// Set height and width of schedule.
 	d3.select( window ).on( 'resize', resize );
@@ -42,9 +43,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		// Draw objects
 		d3_objects.append( 'g' )
 			.attr( 'x', 0 )
-			.attr( 'y', function( datum, index ) { return index * 32; } )
+			.attr( 'y', function( datum, index ) { return index * rowHeight; } )
 			.attr( 'width', width )
-			.attr( 'height', 32 )
+			.attr( 'height', rowHeight )
 			.attr( 'class', 'object' )
 			.each( function( object, index ) {
 				// Select bookings.
@@ -58,17 +59,17 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 				currentObject.append( 'svg:text' )
 					.text( object.name )
 					.attr( 'x', 0 )
-					.attr( 'y', ( index * 32 ) + 20 )
-					.attr( 'height', 32 );
+					.attr( 'y', ( index * rowHeight ) + ( 0.625 * rowHeight ) )
+					.attr( 'height', rowHeight );
 				
 				
 				// Draw bookings within object.
 				bookings.append( 'rect' )
 					.attr( 'rx', 3 )
 					.attr( 'ry', 3 )
-					.attr( 'y', index * 32 )
+					.attr( 'y', index * rowHeight )
 					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
-					.attr( 'height', 30 )
+					.attr( 'height', rowHeight - 2 )
 					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } )
 					.attr( 'fill', '#2d578b' )
 					.attr( 'class', 'booking' );
