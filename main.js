@@ -83,16 +83,22 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	function resize() {
 		if ( objects.length < 1 ) { return; }
 		
+		// Get the new width of the container.
 		width = getWidth();
+		
+		// Update time scale.
 		timeScale.range( [ paddingLeft, width ] );
 		
+		// Resize SVG element.
 		schedule
 			.attr( 'width', width )
 			.attr( 'height', height );
 		
+		// Resize all objects.
 		schedule.selectAll( '.object' )
 			.attr( 'width', width );
 		
+		// Resize all bookings.
 		schedule.selectAll( '.booking' )
 			.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
 			.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } );
