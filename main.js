@@ -15,7 +15,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
 		timeScale,
 		objects = [],
-		width,
+		width = 400,
 		height = 400,
 		paddingLeft = 150,
 		rowHeight = 32;
@@ -81,13 +81,21 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	}
 	
 	function resize() {
+		if ( objects.length < 1 ) { return; }
+		
 		width = getWidth();
+		timeScale.range( [ paddingLeft, width ] );
 		
 		schedule
 			.attr( 'width', width )
 			.attr( 'height', height );
 		
-		visualize();
+		schedule.selectAll( '.object' )
+			.attr( 'width', width );
+		
+		schedule.selectAll( '.booking' )
+			.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
+			.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } );
 	}
 	
 	// Subscribe to events.
