@@ -30,7 +30,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	} );
 	
 	function visualize() {
-		if ( objects.length < 1 ) { return; }
+		if ( objects !== undefined && objects.length < 1 ) { return; }
 		
 		// Select all objects.
 		var d3Objects = schedule.selectAll( 'g.object' )
@@ -118,6 +118,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 				} )
 			] )
 			.range( [ paddingLeft, width ] );
+		
+		// Set height of schedule.
+		height = rowHeight * objects.length;
 		
 		// Render bookings.
 		visualize();
