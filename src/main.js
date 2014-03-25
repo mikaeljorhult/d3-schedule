@@ -62,7 +62,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
 					.attr( 'height', rowHeight - 2 )
 					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } )
-					.attr( 'fill', '#2d578b' )
+					.attr( 'fill', function( datum ) { return datum.color; } )
 					.attr( 'class', 'booking' );
 			} );
 	}
