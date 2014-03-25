@@ -1,4 +1,6 @@
 define( [ 'd3', 'Events' ], function( d3, Events ) {
+	'use strict';
+	
 	var container = d3.selectAll( '.schedule' ),
 		schedule = container.append( 'svg' ),
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
@@ -7,7 +9,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		width = 400,
 		height = 400,
 		paddingLeft = 150,
-		rowHeight = 32;
+		rowHeight = 24;
 	
 	// Set height and width of schedule.
 	d3.select( window ).on( 'resize', resize );
@@ -25,12 +27,12 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		if ( objects.length < 1 ) { return; }
 		
 		// Select all objects.
-		var d3_objects = schedule.selectAll( 'g.object' )
+		var d3Objects = schedule.selectAll( 'g.object' )
 			.data( objects )
 				.enter();
 		
 		// Draw objects
-		d3_objects.append( 'g' )
+		d3Objects.append( 'g' )
 			.attr( 'x', 0 )
 			.attr( 'y', function( datum, index ) { return index * rowHeight; } )
 			.attr( 'width', width )
@@ -57,9 +59,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					.attr( 'rx', 3 )
 					.attr( 'ry', 3 )
 					.attr( 'y', index * rowHeight )
-					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
+					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
 					.attr( 'height', rowHeight - 2 )
-					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } )
+					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } )
 					.attr( 'fill', '#2d578b' )
 					.attr( 'class', 'booking' );
 			} );
@@ -89,8 +91,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		
 		// Resize all bookings.
 		schedule.selectAll( '.booking' )
-			.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.start_time ) ) } )
-			.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.end_time ) ) - timeScale( dateFormat.parse( datum.start_time ) ); } );
+			.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
+			.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } );
 	}
 	
 	// Subscribe to events.
@@ -100,12 +102,12 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			.domain( [
 				d3.min( objects, function( datum ) {
 					return d3.min( datum.bookings, function( booking ) {
-						return dateFormat.parse( booking.start_time );
+						return dateFormat.parse( booking.startTime );
 					} );
 				} ),
 				d3.max( objects, function( datum ) {
 					return d3.max( datum.bookings, function( booking ) {
-						return dateFormat.parse( booking.end_time );
+						return dateFormat.parse( booking.endTime );
 					} );
 				} )
 			] )

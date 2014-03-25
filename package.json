@@ -1,0 +1,27 @@
+{
+	"name": "d3-schedule",
+	"title": "D3 Schedule",
+	"version": "0.1.0",
+	"description": "",
+	"author": {
+		"name": "Mikael Jorhult",
+		"email": "mikael@jorhult.se",
+		"url": "http://jorhult.se"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mikaeljorhult/d3-schedule"
+	},
+	"license": {
+		"type": "MIT",
+		"url": "http://mikaeljorhult.mit-license.org/"
+	},
+	"devDependencies": {
+		"grunt": "0.4.x",
+		"load-grunt-tasks": "0.2.x",
+		"grunt-contrib-concat": "0.3.x",
+		"grunt-contrib-uglify": "0.2.x",
+		"grunt-contrib-jshint": "0.7.x",
+		"grunt-contrib-requirejs": "0.4.x"
+	}
+}
