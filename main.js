@@ -1,14 +1,3 @@
-requirejs.config( {
-	paths: {
-		d3: 'd3.min'
-	},
-	shim: {
-		d3: {
-			exports: 'd3'
-		}
-	}
-} );
-
 define( [ 'd3', 'Events' ], function( d3, Events ) {
 	var container = d3.selectAll( '.schedule' ),
 		schedule = container.append( 'svg' ),
