@@ -46,13 +46,21 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 						.data( object.bookings )
 							.enter();
 				
+				// Add rectangle for styling rows.
+				currentObject.append( 'rect' )
+					.attr( 'x', 0 )
+					.attr( 'y', index * rowHeight )
+					.attr( 'width', '100%' )
+					.attr( 'height', rowHeight )
+					.attr( 'fill', 'transparent' )
+					.attr( 'class', 'row' );
+				
 				// Add object names.
 				currentObject.append( 'svg:text' )
 					.text( object.name )
 					.attr( 'x', 0 )
 					.attr( 'y', ( index * rowHeight ) + ( 0.625 * rowHeight ) )
 					.attr( 'height', rowHeight );
-				
 				
 				// Draw bookings within object.
 				bookings.append( 'rect' )
