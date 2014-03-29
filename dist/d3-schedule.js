@@ -7,26 +7,47 @@
 define( [ 'd3', 'Events' ], function( d3, Events ) {
 	'use strict';
 	
-	var container,
+	var D3Schedule,
+		container,
 		schedule,
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
-		timeScale,
+		timeScale = d3.time.scale(),
 		objects = [],
+		url,
+		
+		// Dimensions.
 		width = 400,
 		height = 400,
 		paddingLeft = 150,
 		rowHeight = 24;
 	
-	// Set height and width of schedule.
+	// Create main module for returning.
+	D3Schedule = {
+		setElement: setElement,
+		setSource: setSource,
+		update: update
+	};
+	
+	// Attach resize function.
 	d3.select( window ).on( 'resize', resize );
-	resize();
 	
 	function setElement( selector ) {
 		container = d3.selectAll( selector );
 		schedule = container.append( 'svg' );
+		
+		// Set height and width of schedule.
+		resize();
+		
+		return D3Schedule;
 	}
 	
-	function setSource( url ) {
+	function setSource( newURL ) {
+		url = newURL;
+		
+		return update();
+	}
+	
+	function update() {
 		// Get bookings.
 		d3.json( url, function( error, json ) {
 			objects = json;
@@ -34,6 +55,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			// Trigger event.
 			Events.publish( 'objects:updated' );
 		} );
+		
+		return D3Schedule;
 	}
 	
 	function visualize() {
@@ -93,8 +116,6 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	}
 	
 	function resize() {
-		if ( objects.length < 1 ) { return; }
-		
 		// Get the new width of the container.
 		width = getWidth();
 		
@@ -106,14 +127,16 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			.attr( 'width', width )
 			.attr( 'height', height );
 		
-		// Resize all objects.
-		schedule.selectAll( '.object' )
-			.attr( 'width', width );
-		
-		// Resize all bookings.
-		schedule.selectAll( '.booking' )
-			.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
-			.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } );
+		if ( objects.length > 0 ) {
+			// Resize all objects.
+			schedule.selectAll( '.object' )
+				.attr( 'width', width );
+			
+			// Resize all bookings.
+			schedule.selectAll( '.booking' )
+				.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
+				.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } );
+		}
 	}
 	
 	// Subscribe to events.
@@ -141,8 +164,6 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		visualize();
 	} );
 	
-	return {
-		setElement: setElement,
-		setSource: setSource
-	};
+	// Return object to allow access to functions.
+	return D3Schedule;
 } );
