@@ -7,8 +7,8 @@
 define( [ 'd3', 'Events' ], function( d3, Events ) {
 	'use strict';
 	
-	var container = d3.selectAll( '.schedule' ),
-		schedule = container.append( 'svg' ),
+	var container,
+		schedule,
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
 		timeScale,
 		objects = [],
@@ -21,13 +21,20 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	d3.select( window ).on( 'resize', resize );
 	resize();
 	
-	// Get bookings.
-	d3.json( 'bookings.json', function( error, json ) {
-		objects = json;
-		
-		// Trigger event.
-		Events.publish( 'objects:updated' );
-	} );
+	function setElement( selector ) {
+		container = d3.selectAll( selector );
+		schedule = container.append( 'svg' );
+	}
+	
+	function setSource( url ) {
+		// Get bookings.
+		d3.json( url, function( error, json ) {
+			objects = json;
+			
+			// Trigger event.
+			Events.publish( 'objects:updated' );
+		} );
+	}
 	
 	function visualize() {
 		if ( objects !== undefined && objects.length < 1 ) { return; }
@@ -133,4 +140,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		// Render bookings.
 		visualize();
 	} );
+	
+	return {
+		setElement: setElement,
+		setSource: setSource
+	};
 } );

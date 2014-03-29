@@ -15,13 +15,26 @@ module.exports = function( grunt ) {
 				' * @license <%= pkg.repository.url %> <%= pkg.license.type %>\n' +
 				'*/\n'
 		},
+		requirejs: {
+			compile: {
+				options: {
+					name: 'd3-schedule',
+					baseUrl: 'src/',
+					paths: {
+						d3: 'empty:'
+					},
+					out: 'dist/d3-schedule.min.js'
+				}
+			}
+		},
 		concat: {
 			options: {
 				banner: '<%= meta.banner %>'
 			},
 			dist: {
 				files: {
-					'dist/d3-schedule.js': 'src/d3-schedule.js'
+					'dist/d3-schedule.js': 'src/d3-schedule.js',
+					'dist/d3-schedule.min.js': 'dist/d3-schedule.min.js'
 				}
 			}
 		},
@@ -41,6 +54,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', [ 'jshint' ]);
 	grunt.registerTask( 'release', [
 		'jshint',
+		'requirejs',
 		'concat'
 	] );
 };
