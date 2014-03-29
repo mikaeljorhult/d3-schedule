@@ -18,6 +18,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	// Create main module for returning.
 	D3Schedule = {
 		setElement: setElement,
+		setHeight: setHeight,
+		setRowHeight: setRowHeight,
 		setSource: setSource,
 		update: update
 	};
@@ -31,6 +33,23 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		
 		// Set height and width of schedule.
 		resize();
+		
+		return D3Schedule;
+	}
+	
+	function setHeight( newHeight ) {
+		if ( newHeight !== false ) {
+			container.style( {
+				'height': newHeight + 'px',
+				'overflow-y': 'scroll'
+			} );
+		}
+		
+		return D3Schedule;
+	}
+	
+	function setRowHeight( newRowHeight ) {
+		rowHeight = newRowHeight;
 		
 		return D3Schedule;
 	}
