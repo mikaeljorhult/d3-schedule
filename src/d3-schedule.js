@@ -7,6 +7,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
 		timeScale = d3.time.scale(),
 		objects = [],
+		url,
+		
+		// Dimensions.
 		width = 400,
 		height = 400,
 		paddingLeft = 150,
@@ -15,7 +18,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	// Create main module for returning.
 	D3Schedule = {
 		setElement: setElement,
-		setSource: setSource
+		setSource: setSource,
+		update: update
 	};
 	
 	// Attach resize function.
@@ -31,7 +35,13 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		return D3Schedule;
 	}
 	
-	function setSource( url ) {
+	function setSource( newURL ) {
+		url = newURL;
+		
+		return update();
+	}
+	
+	function update() {
 		// Get bookings.
 		d3.json( url, function( error, json ) {
 			objects = json;
