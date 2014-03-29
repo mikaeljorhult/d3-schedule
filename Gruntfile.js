@@ -21,7 +21,7 @@ module.exports = function( grunt ) {
 			},
 			dist: {
 				files: {
-					'dist/d3-schedule.js': 'src/main.js'
+					'dist/d3-schedule.js': 'src/d3-schedule.js'
 				}
 			}
 		},
@@ -32,8 +32,7 @@ module.exports = function( grunt ) {
 			all: [
 				'Gruntfile.js',
 				'package.json',
-				'src/main.js',
-				'src/booking.json'
+				'src/d3-schedule.js'
 			]
 		}
 	} );
