@@ -1,7 +1,8 @@
 define( [ 'd3', 'Events' ], function( d3, Events ) {
 	'use strict';
 	
-	var container,
+	var D3Schedule = {},
+		container,
 		schedule,
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
 		timeScale,
@@ -11,6 +12,12 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		paddingLeft = 150,
 		rowHeight = 24;
 	
+	// Create main module for returning.
+	D3Schedule = {
+		setElement: setElement,
+		setSource: setSource
+	};
+	
 	// Set height and width of schedule.
 	d3.select( window ).on( 'resize', resize );
 	resize();
@@ -18,6 +25,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	function setElement( selector ) {
 		container = d3.selectAll( selector );
 		schedule = container.append( 'svg' );
+		
+		return D3Schedule;
 	}
 	
 	function setSource( url ) {
@@ -28,6 +37,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			// Trigger event.
 			Events.publish( 'objects:updated' );
 		} );
+		
+		return D3Schedule;
 	}
 	
 	function visualize() {
@@ -135,8 +146,6 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		visualize();
 	} );
 	
-	return {
-		setElement: setElement,
-		setSource: setSource
-	};
+	// Return object to allow access to functions.
+	return D3Schedule;
 } );
