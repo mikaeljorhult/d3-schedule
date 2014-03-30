@@ -2,18 +2,24 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	'use strict';
 	
 	var D3Schedule,
+		
+		// HTML elements.
 		container,
 		schedule,
+		
+		// Date and time.
 		dateFormat = d3.time.format( '%Y-%m-%d %H:%M:%S' ),
 		timeScale = d3.time.scale(),
-		objects = [],
-		url,
 		
 		// Dimensions.
 		width = 400,
 		height = 400,
 		paddingLeft = 150,
-		rowHeight = 24;
+		rowHeight = 24,
+		
+		// Properties.
+		objects = [],
+		url;
 	
 	// Create main module for returning.
 	D3Schedule = {
