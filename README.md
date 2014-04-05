@@ -1,6 +1,6 @@
 # D3 Schedule
 
-JavaScript module for creating gantt-like charts for bookings.
+JavaScript module for creating gantt-like timeline charts for bookings.
 
 
 ## Usage
@@ -8,7 +8,7 @@ JavaScript module for creating gantt-like charts for bookings.
 D3 Schedule is a module and should be loaded with a script loader, like [RequireJS](http://requirejs.org/).
 
 When loaded you should first set the parent element by using the `setElement()` method. Supply method
-`setSource` with a URL with JSON to display.
+`setSource()` with a URL with JSON to display.
 
 
 ## License

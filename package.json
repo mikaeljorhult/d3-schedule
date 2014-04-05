@@ -2,7 +2,7 @@
 	"name": "d3-schedule",
 	"title": "D3 Schedule",
 	"version": "0.1.0",
-	"description": "",
+	"description": "JavaScript module for creating gantt-like timeline charts for bookings.",
 	"author": {
 		"name": "Mikael Jorhult",
 		"email": "mikael@jorhult.se",
