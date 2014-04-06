@@ -1,6 +1,7 @@
 define( [ 'd3', 'Events' ], function( d3, Events ) {
 	'use strict';
 	
+	// Setup variables.
 	var D3Schedule,
 		
 		// HTML elements.
@@ -19,7 +20,15 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		
 		// Properties.
 		objects = [],
-		url;
+		url,
+		
+		// Property names.
+		propertyNames = {
+			'results': 'results',
+			'start': 'startTime',
+			'end': 'endTime',
+			'events': 'events'
+		};
 	
 	// Create main module for returning.
 	D3Schedule = {
@@ -67,7 +76,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	}
 	
 	function update() {
-		// Get bookings.
+		// Get events.
 		d3.json( url, function( error, json ) {
 			objects = json;
 			
@@ -94,11 +103,11 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			.attr( 'height', rowHeight )
 			.attr( 'class', 'object' )
 			.each( function( object, index ) {
-				// Select bookings.
+				// Select events.
 				var currentObject = d3.select( this ),
-					bookings = currentObject
+					events = currentObject
 						.selectAll( 'rect' )
-						.data( object.bookings )
+						.data( object[ propertyNames.events ] )
 							.enter();
 				
 				// Add rectangle for styling rows.
@@ -117,8 +126,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					.attr( 'y', ( index * rowHeight ) + ( 0.625 * rowHeight ) )
 					.attr( 'height', rowHeight );
 				
-				// Draw bookings within object.
-				bookings.append( 'rect' )
+				// Draw events within object.
+				events.append( 'rect' )
 					.attr( 'rx', 3 )
 					.attr( 'ry', 3 )
 					.attr( 'y', index * rowHeight )
@@ -126,7 +135,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					.attr( 'height', rowHeight - 2 )
 					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } )
 					.attr( 'fill', function( datum ) { return datum.color; } )
-					.attr( 'class', 'booking' );
+					.attr( 'class', 'event' );
 			} );
 	}
 	
@@ -151,8 +160,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			schedule.selectAll( '.object' )
 				.attr( 'width', width );
 			
-			// Resize all bookings.
-			schedule.selectAll( '.booking' )
+			// Resize all events.
+			schedule.selectAll( '.event' )
 				.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
 				.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } );
 		}
@@ -164,13 +173,13 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		timeScale = d3.time.scale()
 			.domain( [
 				d3.min( objects, function( datum ) {
-					return d3.min( datum.bookings, function( booking ) {
-						return dateFormat.parse( booking.startTime );
+					return d3.min( datum[ propertyNames.events ], function( event ) {
+						return dateFormat.parse( event.startTime );
 					} );
 				} ),
 				d3.max( objects, function( datum ) {
-					return d3.max( datum.bookings, function( booking ) {
-						return dateFormat.parse( booking.endTime );
+					return d3.max( datum[ propertyNames.events ], function( event ) {
+						return dateFormat.parse( event.endTime );
 					} );
 				} )
 			] )
@@ -179,7 +188,7 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		// Set height of schedule.
 		height = rowHeight * objects.length;
 		
-		// Render bookings.
+		// Render events.
 		visualize();
 	} );
 	
