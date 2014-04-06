@@ -131,9 +131,9 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 					.attr( 'rx', 3 )
 					.attr( 'ry', 3 )
 					.attr( 'y', index * rowHeight )
-					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
+					.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum[ propertyNames.start ] ) ); } )
 					.attr( 'height', rowHeight - 2 )
-					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } )
+					.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum[ propertyNames.end ] ) ) - timeScale( dateFormat.parse( datum[ propertyNames.start ] ) ); } )
 					.attr( 'fill', function( datum ) { return datum.color; } )
 					.attr( 'class', 'event' );
 			} );
@@ -162,8 +162,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			
 			// Resize all events.
 			schedule.selectAll( '.event' )
-				.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum.startTime ) ); } )
-				.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum.endTime ) ) - timeScale( dateFormat.parse( datum.startTime ) ); } );
+				.attr( 'x', function( datum ) { return timeScale( dateFormat.parse( datum[ propertyNames.start ] ) ); } )
+				.attr( 'width', function( datum ) { return timeScale( dateFormat.parse( datum[ propertyNames.end ] ) ) - timeScale( dateFormat.parse( datum[ propertyNames.start ] ) ); } );
 		}
 	}
 	
@@ -174,12 +174,12 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 			.domain( [
 				d3.min( objects, function( datum ) {
 					return d3.min( datum[ propertyNames.events ], function( event ) {
-						return dateFormat.parse( event.startTime );
+						return dateFormat.parse( event[ propertyNames.start ] );
 					} );
 				} ),
 				d3.max( objects, function( datum ) {
 					return d3.max( datum[ propertyNames.events ], function( event ) {
-						return dateFormat.parse( event.endTime );
+						return dateFormat.parse( event[ propertyNames.end ] );
 					} );
 				} )
 			] )
