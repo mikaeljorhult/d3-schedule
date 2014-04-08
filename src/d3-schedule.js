@@ -78,7 +78,11 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	function update() {
 		// Get events.
 		d3.json( url, function( error, json ) {
-			objects = json;
+			if ( json[ propertyNames.results ] !== undefined ) {
+				objects = json[ propertyNames.results ];
+			} else {
+				objects = json;
+			}
 			
 			// Trigger event.
 			Events.publish( 'objects:updated' );
