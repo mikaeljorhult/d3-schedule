@@ -27,6 +27,8 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 		// Properties.
 		objects = [],
 		url,
+		startTime,
+		endTime,
 		
 		// Property names.
 		propertyNames = {
@@ -84,8 +86,20 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	function update() {
 		// Get events.
 		d3.json( url, function( error, json ) {
+			// Use result array in JSON if it is set.
 			if ( json[ propertyNames.results ] !== undefined ) {
+				// Get array of objects from result property.
 				objects = json[ propertyNames.results ];
+				
+				// Use start time from JSON if available.
+				if ( json[ propertyNames.start ] !== undefined ) {
+					startTime = dateFormat.parse( json[ propertyNames.start ] );
+				}
+				
+				// Use end time from JSON if available.
+				if ( json[ propertyNames.end ] !== undefined ) {
+					endTime = dateFormat.parse( json[ propertyNames.end ] );
+				}
 			} else {
 				objects = json;
 			}
@@ -179,20 +193,27 @@ define( [ 'd3', 'Events' ], function( d3, Events ) {
 	
 	// Subscribe to events.
 	Events.subscribe( 'objects:updated', function () {
+		// Set start time from objects if not set in JSON.
+		if ( startTime === undefined ) {
+			startTime = d3.min( objects, function( datum ) {
+				return d3.min( datum[ propertyNames.events ], function( event ) {
+					return dateFormat.parse( event[ propertyNames.start ] );
+				} );
+			} );
+		}
+		
+		// Set end time from objects if not set in JSON.
+		if ( endTime === undefined ) {
+			endTime = d3.max( objects, function( datum ) {
+				return d3.max( datum[ propertyNames.events ], function( event ) {
+					return dateFormat.parse( event[ propertyNames.end ] );
+				} );
+			} );
+		}
+		
 		// Setup timescale.
 		timeScale = d3.time.scale()
-			.domain( [
-				d3.min( objects, function( datum ) {
-					return d3.min( datum[ propertyNames.events ], function( event ) {
-						return dateFormat.parse( event[ propertyNames.start ] );
-					} );
-				} ),
-				d3.max( objects, function( datum ) {
-					return d3.max( datum[ propertyNames.events ], function( event ) {
-						return dateFormat.parse( event[ propertyNames.end ] );
-					} );
-				} )
-			] )
+			.domain( [ startTime, endTime ] )
 			.range( [ paddingLeft, width ] );
 		
 		// Set height of schedule.
