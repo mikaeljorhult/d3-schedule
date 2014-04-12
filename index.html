@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>D3 Schedule</title>
+		
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="src/css/main.css">
+	</head>
+	
+	<body>
+		<div class="schedule"></div>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js" data-main="src/main"></script>
+		<script>
+			requirejs.config( {
+				'baseUrl': 'src',
+				'paths': {
+					'd3-schedule': 'd3-schedule.min',
+					'd3': '//cdnjs.cloudflare.com/ajax/libs/d3/3.4.5/d3.min'
+				}
+			} );
+		</script>
+	</body>
+</html>
